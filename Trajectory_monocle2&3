@@ -186,13 +186,13 @@ FeaturePlot(publishedLNSC,features = c('Pdpn','Icam1','Vcam1','Pecam1'))
 
 
 
-#with monocle2
+# with monocle2
 #Load seurat object 
 seurat_object <-readRDS(‘seaurat_object.rds’)
 
 #Extract data, phenotype data, and feature data from the SeuratObject 
-data <- as(as.matrix(FRCFDC@assays$RNA@data),'sparseMatrix')
-
+data <- as(as.matrix(FRCFDC@assays$RNA@data),'sparseMatrix')  #data이름은 변경 불가 
+ 
 pd <- new('AnnotatedDataFrame',data = FRCFDC@meta.data)
 
 fData <- data.frame(gene_short_name = row.names(data),row.names = row.names(data))
