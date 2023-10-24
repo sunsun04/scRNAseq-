@@ -1,10 +1,10 @@
 < Data preprocessing > 
-#SVF(sample)
+# SVF(sample)
 SVF.matrix <- Read10X("/Users/sunyoung/Desktop/SVF sc data/") # matrix file은 barcode, matrix,features file 세 개를 모두 포함하는 파일
 SVF.data <- Read10X("/Users/sunyoung/Desktop/SVF sc data/")
 SVF <- CreateSeuratObject(counts = SVF.data, project = "SVFsc",min.cells = 3,min.features = 200)
 SVF[["percent.mt"]] <- PercentageFeatureSet(SVF,pattern = "^mt-")
-# mitocontrial gene pattern of mouse sample : "^mt-"(mouse sample은 HUMNA과 다르게 반드시 소문자 mt로 입력해야함!!!)
+#mitocontrial gene pattern of mouse sample : "^mt-"(mouse sample은 HUMNA과 다르게 반드시 소문자 mt로 입력해야함!!!)
 VlnPlot(SVF,features = c("nFeature_RNA","nCount_RNA", "percent.mt"),ncol = 3)
 plot1 <- FeatureScatter(SVF,feature1 = "nCount_RNA",feature2 = "percent.mt")
 plot2 <- FeatureScatter(SVF, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
