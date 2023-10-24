@@ -1,0 +1,242 @@
+library(Monocle3)
+library(SeuratData)
+library(SeuratWrappers)
+library(ggplot2)
+library(magrittr)
+install.packages("SeuratWrappers")
+install.packages("SeuratData")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+install.packages("devtools")
+devtools::install_github('cole-trapnell-lab/monocle3')
+devtools::install_github('cole-trapnell-lab/monocle3', ref="develop")
+library(monocle3)
+install.packages("monocle3")
+
+install.packages("remotes")
+remotes::install_github("LTLA/celldex")
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install(version = "3.14")
+
+install.packages("devtools")
+devtools::install_github('cole-trapnell-lab/monocle3')
+devtools::install_github('cole-trapnell-lab/monocle3', ref="develop")
+library(monocle3)
+#installation of monocle3
+  # Enter commands in R (or R studio, if installed)
+  # Install the remotes package 
+  install.packages('remotes')
+  # Replace '2.3.0' with your desired version
+  remotes::install_version(package = 'Seurat', version = package_version('2.3.0'))
+  library(Seurat)
+  remotes::install_github("satijalab/seurat-data", "seurat5", quiet = TRUE)
+  remotes::install_github("satijalab/azimuth", "seurat5", quiet = TRUE)
+  remotes::install_github("satijalab/seurat-wrappers", "seurat5", quiet = TRUE)
+  remotes::install_github("stuart-lab/signac", "seurat5", quiet = TRUE)
+  library(monocle3)
+  library(Seurat)
+  library(SeuratWrappers)
+  library(patchwork)
+  library(dplyr)
+  
+
+#trajectory analysis with monocle3
+#1. Setting up monocle3 cell_data_set object using the SueratWrappers
+
+  
+
+integrated.sub <- as.Seurat(cds, assay = NULL)
+FeaturePlot(integrated.sub, "monocle3_pseudotime")
+
+# subset B cell
+immune.combined_rm_ptprc_final2 <- subset(immune.combined_rm_ptprc_final2, idents = c("1","2","3","5","7","8"), invert = TRUE)
+# re-clustering
+immune.combined_rm_ptprc_final2 <- FindVariableFeatures(immune.combined_rm_ptprc_final2,selection.method = "vst", nfeatures = 2000)
+DefaultAssay(immune.combined_rm_ptprc_final2) <- "integrated"
+all.genes <-row.names(immune.combined_rm_ptprc_final2)
+immune.combined_rm_ptprc_final2 <- ScaleData(immune.combined_rm_ptprc_final2,features = all.genes)
+immune.combined_rm_ptprc_final2 <- RunPCA(immune.combined_rm_ptprc_final2,features = VariableFeatures(object = immune.combined_rm_ptprc_final2))
+ElbowPlot(immune.combined_rm_ptprc_final2)
+immune.combined_rm_ptprc_final2 <-FindNeighbors(immune.combined_rm_ptprc_final2,dims = 1:30)
+immune.combined_rm_ptprc_final2 <- FindClusters(immune.combined_rm_ptprc_final2,resolution = 0.5)
+immune.combined_rm_ptprc_final2 <-RunUMAP(immune.combined_rm_ptprc_final2,dims = 1:30)
+DimPlot(immune.combined_rm_ptprc_final2, reduction = "umap",split.by = "sample")
+
+s.markers_reclustering_final2 <- FindAllMarkers(immune.combined_rm_ptprc_final2,only.pos = TRUE ,min.pct =0.25, logfc.threshold = 0.25)
+write.csv(s.markers_reclustering_final2,"C:/Users/HI/Documents/R data/s.markers_reclustering_final2.csv")
+  
+immune.combined_rm_ptprc_final2 <- RenameIdents(immune.combined_rm_ptprc_final2,'0'="Fn1hi MSC1",'1'= "FDC",'2'= "FRC",'3'= "MSC2",'4'= "BEC",'5'= "Sbsnhi MSC1",'6'="LEC",'7'= "TRC",'8'= "PvC",'9'= "neuronal") 
+DimPlot(immune.combined_rm_ptprc_final2)
+
+
+#singleR installation
+install.packages("devtools")
+devtools::install_github("dviraran/SingleR")
+
+#each sample normalization to clustering 
+publishedSVF <- NormalizeData(SVF, normalization.method = "LogNormalize", scale.factor = 10000)
+publishedSVF <- NormalizeData(publishedSVF)
+
+publishedSVF <- FindVariableFeatures(publishedSVF, selection.method = "vst", nfeatures = 2000)
+
+# Identify the 10 most highly variable genes
+top10 <- head(VariableFeatures(publishedSVF), 10)
+
+# plot variable features with and without labels
+plot1 <- VariableFeaturePlot(publishedSVF)
+plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
+plot1 + plot2
+
+all.genes <- rownames(publishedSVF)
+
+publishedSVF <- ScaleData(publishedSVF, features = all.genes)
+publishedSVF <- RunPCA(publishedSVF, features = VariableFeatures(object = publishedSVF))
+publishedSVF <- RunUMAP(publishedSVF, reduction = "pca", dims = 1:30)
+publishedSVF <- FindNeighbors(publishedSVF, reduction = "pca", dims = 1:30)
+publishedSVF <- FindClusters(publishedSVF, resolution = 0.5)
+p1 <- DimPlot(publishedSVF, reduction = "umap")
+p2 <- DimPlot(publishedSVF, reduction = "umap", label = TRUE, repel = TRUE)
+p1 + p2
+DimPlot(publishedSVF, reduction = "umap")
+saveRDS(publishedSVF, file = "/Users/sunyoung/Documents/transcriptome /SVF transcriptome/intergration_SVF.rds")
+
+DefaultAssay(publishedSVF) <- "RNA"
+s.markers_publishedSVF <- FindAllMarkers(publishedSVF,only.pos = TRUE ,min.pct =0.25, logfc.threshold = 0.25)
+write.csv(s.markers_publishedSVF,"/Users/sunyoung/Documents/transcriptome /SVF transcriptome/s_Markers.csv")  
+
+VlnPlot(publishedSVF,features = "Ptprc")  
+publishedSVF <- subset(publishedSVF, idents = "6", invert = TRUE)
+
+
+publishedSVF <- FindVariableFeatures(publishedSVF,selection.method = "vst", nfeatures = 2000)
+DefaultAssay(publishedSVF) <- "integrated"
+all.genes <-row.names(publishedSVF)
+publishedSVF <- ScaleData(publishedSVF,features = all.genes)
+publishedSVF <- RunPCA(publishedSVF,features = VariableFeatures(object = publishedSVF))
+ElbowPlot(publishedSVF)
+publishedSVF <-FindNeighbors(publishedSVF,dims = 1:30)
+publishedSVF <- FindClusters(publishedSVF,resolution = 0.5)
+publishedSVF <-RunUMAP(publishedSVF,dims = 1:30)
+DimPlot(publishedSVF, reduction = "umap")
+
+s.markers_publishedSVF_rmptprc <- FindAllMarkers(publishedSVF,only.pos = TRUE ,min.pct =0.25, logfc.threshold = 0.25)
+write.csv(s.markers_publishedSVF_rmptprc,"C:/Users/HI/Documents/R data/s.markers_publishedSVF_rmptprc.csv")
+  
+  
+publishedSVF <- subset(publishedSVF, idents = c("1","2","3","5","7","8"), invert = TRUE)
+DimPlot(publishedSVF)
+publishedSVF <- RenameIdents(publishedSVF,'0' ="Fn1hi MSC1", '1'="MSC2",'2'="Sbsnhi MSC1",'3'= "Pecam1+ EC", '5'="FRC")
+
+SVFLNSC_final$celltype <- Idents(SVFLNSC_final)
+
+#trajectory for SVF with monocle3 
+cdsSVF <- as.cell_data_set(publishedSVF)
+cdsSVF <- cluster_cells(cdsSVF, resolution=4e-3)
+p1 <- plot_cells(cdsSVF, color_cells_by = "cluster", show_trajectory_graph = FALSE)
+p2 <- plot_cells(cdsSVF, color_cells_by = "partition", show_trajectory_graph = FALSE)
+wrap_plots(p1, p2)  
+
+cdsSVF <- learn_graph(cdsSVF, use_partition = TRUE, verbose = FALSE)
+plot_cells(cdsSVF,
+           color_cells_by = "cluster",
+           label_groups_by_cluster=FALSE,
+           label_leaves=FALSE,
+           label_branch_points=TRUE)
+
+cdsLNSC <- order_cells(cdsLNSC)
+plot_cells(cdsLNSC,
+           color_cells_by = "pseudotime",
+           group_cells_by = "cluster",
+           label_cell_groups = FALSE,
+           label_groups_by_cluster=TRUE,
+           label_leaves=FALSE,
+           label_branch_points=FALSE,
+           label_roots = FALSE,
+           trajectory_graph_color = "grey60")  
+#LNSC 
+cdsLNSC <- as.cell_data_set(publishedLNSC)
+cdsLNSC <- cluster_cells(cdsLNSC, resolution=1e-3)
+p1 <- plot_cells(cdsLNSC, color_cells_by = "cluster", show_trajectory_graph = FALSE)
+p2 <- plot_cells(cdsLNSC, color_cells_by = "partition", show_trajectory_graph = FALSE)
+wrap_plots(p1, p2) 
+
+cdsLNSC <- learn_graph(cdsLNSC, use_partition = TRUE, verbose = FALSE)
+plot_cells(cdsLNSC,
+           color_cells_by = "cluster",
+           label_groups_by_cluster=TRUE,
+           label_leaves=FALSE,
+           label_branch_points=FALSE,group_label_size = 5,label_roots = FALSE)
+
+cdsLNSC <- order_cells(cdsLNSC)
+plot_cells(cdsLNSC,
+           color_cells_by = "pseudotime",
+           group_cells_by = "cluster",
+           label_cell_groups = FALSE,
+           label_groups_by_cluster=FALSE,
+           label_leaves=FALSE,
+           label_branch_points=FALSE,
+           label_roots = FALSE,
+           trajectory_graph_color = "grey60",label=TRUE)   
+
+FeaturePlot(publishedSVF,features = c('Pdpn','Icam1','Vcam1','Pecam1'))
+FeaturePlot(publishedLNSC,features = c('Pdpn','Icam1','Vcam1','Pecam1'))
+
+
+
+
+#with monocle2
+#Load seurat object 
+seurat_object <-readRDS(‘seaurat_object.rds’)
+
+#Extract data, phenotype data, and feature data from the SeuratObject 
+data <- as(as.matrix(FRCFDC@assays$RNA@data),'sparseMatrix')
+
+pd <- new('AnnotatedDataFrame',data = FRCFDC@meta.data)
+
+fData <- data.frame(gene_short_name = row.names(data),row.names = row.names(data))
+fd <- new('AnnotatedDataFrame',data = fData)
+fd <- fDa
+#construct monocle cds 
+monocle2_cds_FRCFDC <- monocle::newCellDataSet(data, phenoData = pd , featureData = fd, lowerDetectionLimit = 0.5, expressionFamily = uninormal())
+
+
+var_gene <- FRCFDC[["integrated"]]@var.features
+ordering_gene <- var_gene
+
+monocle2_cds_FRCFDC <- setOrderingFilter(monocle2_cds_FRCFDC,ordering_gene)
+monocle2_cds_FRCFDC <- reduceDimension(monocle2_cds_FRCFDC,norm_method = "non",reduction_method = 'DDRTree',max_components = 4,scaling = TRUE,verbose = TRUE, pseudo_expr = 0)
+monocle2_cds_FRCFDC <- orderCells(monocle2_cds_FRCFDC)
+plot_cell_trajectory(monocle2_cds_FRCFDC,color_by = 'celltype',branch_point = 1)+facet_wrap(~State, nrow = 1)
+plot_cell_trajectory(monocle2_cds_FRCFDC, color_by = "Pseudotime")
+
+
+
+monocle_cds_SVFLNSC <- orderCells(monocle_cds_SVFLNSC, root_state = GM_state(monocle_cds_SVFLNSC))
+
+
+plot_cell_trajectory(monocle_cds_SVFLNSC, color_by = "Pseudotime")
+
+#DEG analysis 
+
+diff_test_res <- differentialGeneTest(monocle_cds_SVFLNSC,fullModelFormulaStr = "~sm.ns(Pseudotime)")
+sig_gene_names <- row.names(subset(diff_test_res, qval < 0.1))
+plot_pseudotime_heatmap(monocle_cds_SVFLNSC[sig_gene_names_3,],cores = 2,show_rownames = T)
+
+
+sig_gene_names_2 <- row.names(subset(diff_test_res, qval < 0.05))
+plot_pseudotime_heatmap(monocle_cds_SVFLNSC[sig_gene_names,],branch_point = 2 , cores = 7,show_rownames = T)
+
+branch1_heatmap <- plot_genes_branched_heatmap(monocle2_cds_SVFLNSC[row.names(subset(diff_test_res,qval < 1e-2)),],branch_point = 1,cores = 4,use_gene_short_name = T,show_rownames = T,return_heatmap = TRUE)
+lung_genes <- row.names(subset(fData(monocle_cds_SVFLNSC),
+                               gene_short_name %in% c("Des", "Bok", "Cxcl13")))
+plot_genes_branched_pseudotime(lung[lung_genes,],
+                               branch_point = 1,
+                               color_by = "Time",
+                               ncol = 1)
+
+branch2_heatmap_FRCFDC <- plot_genes_branched_heatmap(monocle2_cds_FRCFDC[row.names(subset(diff_test_res_FRCFDC,qval < 1e-2)),],branch_point = 1,cores = 1,use_gene_short_name = T,show_rownames = T,return_heatmap = TRUE)
+
+head(branch2_heatmap_FRCFDC$annotation_row)
+write.csv(branch2_heatmap_FRCFDC$annotation_row,"C:/Users/HI/Documents/R data/s.markers/DEG_FRCFDC_231016.csv")
