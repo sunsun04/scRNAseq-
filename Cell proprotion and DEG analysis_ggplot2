@@ -1,0 +1,96 @@
+# cell proportion
+  # method1. table추출 후 prism으로 그리기 
+
+prop.table(table(Idents(immune.combined_rm_ptprc_final2), immune.combined_rm_ptprc_final2$sample), margin = 2) #margin=1 : 각 cluster의 sample합이 1 /margin =2 : sample별 cluster의 합이 1
+  # method2. ggpot으로 그리기 
+ggplot(immune.combined_rm_ptprc_final2@meta.data, aes(x=sample, fill = immune.combined_rm_ptprc_final2@active.ident)) + geom_bar(position = 'fill') + theme_bw()
+ggplot(immune.combined_rm_ptprc_final2@meta.data, aes(x=sample, fill = immune.combined_rm_ptprc_final2@active.ident)) + geom_bar(position = 'fill') + theme_classic()  
+
+# volcanoplot
+ggplot(FRC_markers_test, aes(x=avg_log2FC, y = -log10(p_val_adj))) + geom_point()
+ggplot(FRC_markers_test, aes(x=avg_log2FC, y = -log10(p_val_adj))) + geom_point() + theme_classic()
+
+s.markers_publishedSVF_rmptprc <- FindAllMarkers(publishedSVF ,min.pct =0.25, logfc.threshold = 0.25)
+#only.pos : poitively 발현하는 마커만 추출(왜? cluster명명하려면 더 많이 발현하는 마커로 보통 명명하기 때문에. 즉 cluster 명명하기 위해. volcanoplot을 그리려면 negative도 포함해서 marker file 다시 뽑아야함. )
+# min.pct : 한 세포에서 적어도 25%는 발현하는 마커만 보여줌
+
+# find all markers distinguishing cluster 5 from clusters 0 and 3
+SVFLNSC_Forvolcano$celltype.sample <- paste(Idents(SVFLNSC_Forvolcano), SVFLNSC_Forvolcano$sample, sep = "_")
+SVFLNSC_Forvolcano$celltype <- Idents(SVFLNSC_Forvolcano) # metadata에 cell type별 labeling들어감. 
+Idents(SVFLNSC_Forvolcano) <- "celltype.sample" # sample에 따라 나누는 거니까 생략해도 되는 단계.
+publishedLNSC$celltype <- Idents(publishedLNSC)
+publishedSVF$celltype <-Idents(publishedSVF)
+
+#FRC cluster에서 sample(SVF,LNSC)간 비교위해, marker 찾기
+FRC.markers <- FindMarkers(SVFLNSC_final, ident.1 = "FRC_SVF", ident.2 = "FRC_LNSC", verbose = FALSE)
+MSC2.markers <- FindMarkers(SVFLNSC_Forvolcano, ident.1 = "MSC2_SVF", ident.2 = "MSC2_LNSC", verbose = FALSE) #rds file에서 celltype$sample에 명명되어있는 대로 ident 부여함.
+head(MSC2.markers, n = 15)
+SVF_FRC_FDC.markers <- FindMarkers(SVFLNSC_Forvolcano,ident.1 = "FRC", ident.2 = "FDC", verbose = FALSE)
+MSC2_FRC.markers <- FindMarkers(SVFLNSC_Forvolcano,ident.1 = "MSC2", ident.2 = "FRC", verbose = FALSE)
+
+# add a column of NAs
+MSC2.markers$diffexpressed <- "NO"
+SVF_FRC_FDC.markers$diffexpressed <-"NO"
+MSC2_FRC.markers$diffexpressed <- "NO"
+# if log2Foldchange > 0.6 and pvalue < 0.05, set as "UP" 
+MSC2.markers$diffexpressed[MSC2.markers$avg_log2FC > 1 & MSC2.markers$p_val_adj < 0.05] <- "UP"
+SVF_FRC_FDC.markers$diffexpressed[SVF_FRC_FDC.markers$avg_log2FC > 1.5 & SVF_FRC_FDC.markers$p_val_adj < 0.05] <- "UP"
+MSC2_FRC.markers$diffexpressed[MSC2_FRC.markers$avg_log2FC > 1.5 & MSC2_FRC.markers$p_val_adj < 0.05] <- "UP"
+
+# if log2Foldchange < -0.6 and pvalue < 0.05, set as "DOWN"
+MSC2.markers$diffexpressed[MSC2.markers$avg_log2FC < -1 & MSC2.markers$p_val_adj < 0.05] <- "DOWN"
+SVF_FRC_FDC.markers$diffexpressed[SVF_FRC_FDC.markers$avg_log2FC < -1.5 & SVF_FRC_FDC.markers$p_val_adj < 0.05] <-"DOWN"
+MSC2_FRC.markers$diffexpressed[MSC2_FRC.markers$avg_log2FC < -1.5 & MSC2_FRC.markers$p_val_adj < 0.05] <-"DOWN"
+
+# Re-plot but this time color the points with "diffexpressed"
+p1 <- ggplot(data=MSC2.markers, aes(x=avg_log2FC, y=-log10(p_val_adj), col=diffexpressed)) + geom_point() + theme_classic()
+p11 <- ggplot(data=SVF_FRC_FDC_markers_re2, aes(x=avg_log2FC, y=-log10(p_val_adj), col=diffexpressed)) + geom_point() + theme_classic()
+P111 <- ggplot(data=MSC2_FRC.markers, aes(x=avg_log2FC, y=-log10(p_val_adj), col=diffexpressed)) + geom_point() + theme_classic()
+# Add lines as before...
+p2 <- p1 + geom_vline(xintercept=c(-2, 2), col="red") + geom_hline(yintercept=-log10(0.05), col="red")+ scale_color_manual(values=c("blue", "black", "red")) 
+p22 <- p11 + geom_vline(xintercept=c(-1.5, 1.5), col="red") + geom_hline(yintercept=-log10(0.05), col="red")+ scale_color_manual(values=c("blue", "black", "red")) 
+P222 <- P111 + geom_vline(xintercept=c(-1.5, 1.5), col="red") + geom_hline(yintercept=-log10(0.05), col="red")+ scale_color_manual(values=c("blue", "black", "red")) 
+
+p11 + p22
+
+write.csv(MSC2.markers,"C:/Users/HI/Documents/R data/s.markers/MSC2.markerscsv.csv") 
+write.csv(SVF_FRC_FDC.markers,"C:/Users/HI/Documents/R data/s.markers/SVF_FRC_FDC.markers.csv") 
+write.csv(SVF_FRC_FDC.markers,"C:/Users/HI/Documents/R data/s.markers/SVF_FRC_FDC.markers_re.csv") 
+write.csv(MSC2_FRC.markers,"C:/Users/HI/Documents/R data/s.markers/MSC2_FRC.markers.csv") 
+
+MSC2_FRC_markers$delabel <- NA
+MSC2_FRC_markers$delabel[MSC2_FRC_markers$diffexpressed != "NO"] <- MSC2_FRC_markers$gene[MSC2_FRC_markers$diffexpressed != "NO"]
+
+ggplot(data=SVF_FRC_FDC_markers_re2, aes(x=avg_log2FC, y=-log10(p_val_adj), col=diffexpressed, label=delabel)) +
+    geom_point() + geom_text()
+    theme_minimal() +
+    scale_color_manual(values=c("blue", "black", "red")) +
+    geom_vline(xintercept=c(-1.5,1.5), col="red") +
+    geom_hline(yintercept=-log10(0.05), col="red", FontSize = 1)
+  
+# csv file에서 'gene' column추가 : 맨 왼쪽 gene 열을 맨 오른쪽에 복붙 > 
+MSC2_markerscsv$delabel[MSC2_markerscsv$diffexpressed != "NO"] <- MSC2_markerscsv$gene[MSC2_markerscsv$diffexpressed != "NO"]
+ggplot(data=SVF_FRC_FDC_markers_re2, aes(x=avg_log2FC, y=-log10(p_val_adj), col=diffexpressed, label=delabel),FontSize(1)) +
+  geom_point() + 
+  theme_classic() +
+  geom_text() +
+  scale_color_manual(values=c("blue", "black", "red")) +
+  geom_vline(xintercept=c(-0.6, 0.6), col="red") +
+  geom_hline(yintercept=-log10(0.05), col="red")
+
+
+FRC.markers$delabel[FRC.markers$diffexpressed != "NO"] <- FRC.markers$gene_symbol[FRC.markers$diffexpressed != "NO"]
+ggplot(data=FRC.markers, aes(x=avg_log2FC, y=-log10(p_val_adj), col=diffexpressed)) + 
+  geom_point() + 
+  theme_minimal() 
+
+FRC.markers$delabel <- NA
+FRC.markers$delabel[de$diffexpressed != "NO"] <- de$gene_symbol[de$diffexpressed != "NO"]
+
+ggplot(data=SVF_FRC_FDC_markers_re2, aes(x=avg_log2FC, y=-log10(p_val_adj), col=diffexpressed, label=delabel)) + geom_point() + theme_classic() + geom_text() + scale_color_manual(values=c("blue", "black", "red")) + geom_vline(xintercept=c(-1, 1), col="red") + geom_hline(yintercept=-log10(0.05), col="red") 
+
+
+
+
+
+
