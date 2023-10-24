@@ -1,0 +1,114 @@
+# loading packages
+
+library(devtools)
+install_github("wjawaid/enrichR")
+install.packages("enrichR")
+library(enrichR)
+websiteLive <- getOption("enrichR.live")
+if (websiteLive) {
+  listEnrichrSites()
+  setEnrichrSite("Enrichr") # Human genes   
+}
+if (websiteLive) dbs <- listEnrichrDbs()
+## if (is.null(dbs)) websiteLive <- FALSE
+if (websiteLive) head(dbs)
+dbs <- c("GO_Molecular_Function_2015", "GO_Cellular_Component_2015", "GO_Biological_Process_2015","Transcription_Factor_PPIs")
+#1.EMO
+if (websiteLive) {enriched <- enrichr(c("Agt", "Cav1", "Serpinh1", "Col18a1", "Col3a1", "Col4a1","Col4a2","Col4a4","Col4a5","Col5a1","Col5a2","Col8a1","Col1a1","Col1a2","Eln","Fn1","Foxf1","Hspg2","Lgals3","Lox","Loxl1","Mmp14","Nfkb2","Pdgfra","Lcp1","Ptx3","Sfrp2","Tgfb2","Adamts5","Creb3l1","Mmp23","Tmem38b","Col5a3","Dpt","Ntn4","Smpd3","Loxl4","Ccdc80","Ndnf","Col6a4","Pxdn","Vit","Tnxb","Loxl2","Qsox1","Col28a1","Adamts2","Lamc1","Adamtsl4","Adamts15","Col23a1","Vwa1","Egflam","Abi3bp","Mia3","Col27a1","Bmp1","Col6a1","Col6a2","P4ha2","Pcolce","Plod1","Bgn","Fbln2","Fbn1","Fbn2","Itgb5","F11r","Sparc","Sdc4","Emilin2","Atp1b1","Dpp4","Atp1a2","Ncam1","Hgf","Ptpn1","Stat3","Ubb","Ubc","Sh3kbp1","Tns3","Plat","Thbs2","Cdkn1b"), dbs)}
+if (websiteLive) enriched[["Transcription_Factor_PPIs"]]
+if (websiteLive) { plotEnrich(enriched[[3]], showTerms = 20, numChar = 40, y = "Count", orderBy = "P.value")}
+#2.BVD
+if (websiteLive) {enriched <- enrichr(c("Ace", "Actg1", "Angpt1", "Agt", "Ahr", "Ang","Aqp1","Rhob","Zfp36l1","Klf5","Cav1","Cdh2","Socs3","Ackr3","Col18a1","Col3a1","Col4a1","Col4a2","Col5a1","Col8a1","Col1a1","Col1a2","Ecm1","Egr1","Egr2","Ephb2","Fgf10","Fn1","Gata6","Gja1","Gli3","Foxf1","Hpgd","Hspg2","Jun","Junb","Lox","Meox2","Mfge8","Cited2","Myh9","Ncl","Ngfr","Npr3","Nrp2","Pcsk5","Rora","Pdgfra","Prrx2","Cxcl12","Sfrp2","Sema3c","Spi1","Sox4","Syk","Tek","Tgfb2","Tgfbr2","Tgfbr3","Thy1","Vegfa","Wnt2","Osr1","Ramp1","Amotl2","Angptl4","Clec14a","Tmem100","Plpp3","Ecscr","Ndnf","Antxr1","Pxdn","Rspo3","Bmper","Heg1","Loxl2","Mylk","Zc3h12a","Ccbe1","Mia3","C3","Bcl10","Ctsh","Egfr","Esr1","Mmp14","Ntn1","Ptch1","Rps7","Sema4c","Sfrp1","Sdc4","Spry1","Zeb2","Hs3st3b1","Ctnnbip1","Csmd1","Mtss1","Dchs1","Rspo2"), dbs)}
+#3.motility
+if (websiteLive) {enriched <- enrichr(c("Acp5", "Actg1", "Angpt1", "Agt", "Acta2", "Anxa3","Aqp1","Rhob","Atp5a1","Cd151","Cav1","Coro1a","Cldn1","Ackr3","Col18a1","Col1a1","Ctsh","Egfr","Egr1","Ephb2","Fgf10","Fn1","Lpar1","Grn","Hspa5","Foxf1","Hgf","Hmgb1","Igf1r","Il6st","Jun","Lbp","Lgals3","Anxa1","Mmp14","Myoc","Ntn1","Ntrk3","Pcsk5","Pdgfra","Lgmn","Ptn","Ptprc","Cxcl12","Sema3c","Sema4b","Sema4c","Spi1","Sod2","Sparc","Stat3","Tac1","Tek","Tgfb2","Tgfbr2","Thy1","Ube2i","Tgfbr2","Tgfbr3","Thy1","Vegfa","Ube2i","Ets1","Cxcl14","Plpp3","Rarres2","Phpt1","Plvap","Mylk","Synpo2","Zc3h12a","P2ry6","Fam107a","Ccbe1","Mia3","Btg1","C3","Cd34","Col4a2","Cybb","Ecm1","Gata6","Klf2","Mecp2","Egfr","Ppp1r15a","Ngfr","Ntrk1","Ptgis","Sfrp2","Stat1","Thbs2","Creb3l1","Cysltr1","Rgcc","Ecscr","Bmper","Emilin2","Atp2b4","Meox2","Tgfbr3"), dbs)}
+#4.adhesion
+if (websiteLive) {enriched <- enrichr(c("Ager", "Rhod", "B2m", "Bcl10", "C1qbp", "Cd1d1","Cd81","Cdk6","Emp2","Dmtn","Epha4","Ephb6","Fadd","Gpam","H2-Ab1","H2-DMb1","Foxf1","Hsph1","Hspd1","Hyal1","Icam1","Igf2","Il12a","Il2","Il7","Irf1","Jak2","Ldb1","Lif","Mdk","Cited2","Nrp1","Enpp2","Ccl21a","Ptger4","Ptn","Rara","Rela","Rras","Rsu1","Ccl2","Cxcl12","Sox12","Sox4","Sdc4","Thbs1","Tnfsf11","Tpm1","Vcam1","Vegfa","Vtn","Xbp1","Cib1","Ccl19","Tnfsf13b","Map4k4","Icosl","Myadm","Cxcl13","Lgals8","Socs5","Ndnf","Fcho1","Selenok","Nfkbiz","Kat5","Smarcd1","Emilin1","Ripk2","Acta2","Apoe","Bcl2","Bst1","Zfp36l1","Cd9","Cebpa","Ctsc","Fas","Fgf10","Ccn2","Flt3l","Gas6","Jund","Lag3","Laptm5","Lmo4","Lst1","Mif","Nfatc2","Pdgfa","Pla2g2d","Pla2g5","Ptpn2","Stxbp1","Tec","Tnfaip3","Tslp","Clcf1","Exosc3","Znhit1","Slamf8","Il33","Cygb","Dcaf15","Nr1d1","Zc3h12a","Cyp26b1","Tox","Akirin2","Fos","Gnas","Prmt1","Eif6","Jun","Meis2","Nfkbia","Nme2","Rbp1","Ccl9","Snai2","Stat3","Klf10","Zfp36","Tmem176b","Tmem176a","Tmem178","Meaf6","Hmgb2","Bmyc","Csf2ra","Csf2rb","Csf2rb2","Tenm3","Cnn2","Grem1","Ache","Cdh4","Cux1","Egr2","Gdi1","Id4","Mme","Myo5b","Ntf3","Ptprf","Rfx3","Sema5a","Trf","Vegfc","Cysltr1","Snw1","Plxnb2","Plxnb1","Robo2"), dbs)}
+
+
+
+#FRC cluster에서 sample(SVF,LNSC)간 비교위해, marker 찾기
+FRC_FDC.markers <- FindMarkers(SVFLNSC_noECsandothers,ident.1 = "FRC", ident.2 = "FDC", verbose = FALSE)
+FRC_FDC.markers <- FindMarkers(SVFLNSC_noECsandothers,ident.1 = "FRC", ident.2 = "FDC", verbose = FALSE)
+head(FRC_FDC.markers, n = 15)
+# add a column of NAs
+FRC_FDC.markers$diffexpressed <- "NO"
+FRC_FDC.markers$diffexpressed <-"NO"
+FRC_FDC.markers$diffexpressed <- "NO"
+# if log2Foldchange > 0.6 and pvalue < 0.05, set as "UP" 
+FRC_FDC.markers$diffexpressed[FRC_FDC.markers$avg_log2FC > 1 & FRC_FDC.markers$p_val_adj < 0.05] <- "UP"
+FRC_FDC.markers$diffexpressed[FRC_FDC.markers$avg_log2FC > 1.5 & FRC_FDC.markers$p_val_adj < 0.05] <- "UP"
+FRC_FDC.markers$diffexpressed[FRC_FDC.markers$avg_log2FC > 1.5 & FRC_FDC.markers$p_val_adj < 0.05] <- "UP"
+
+# if log2Foldchange < -0.6 and pvalue < 0.05, set as "DOWN"
+FRC_FDC.markers$diffexpressed[FRC_FDC.markers$avg_log2FC < -1 & FRC_FDC.markers$p_val_adj < 0.05] <- "DOWN"
+FRC_FDC.markers$diffexpressed[FRC_FDC.markers$avg_log2FC < -1.5 & FRC_FDC.markers$p_val_adj < 0.05] <-"DOWN"
+FRC_FDC.markers$diffexpressed[FRC_FDC.markers$avg_log2FC < -1.5 & FRC_FDC.markers$p_val_adj < 0.05] <-"DOWN"
+
+# Re-plot but this time color the points with "diffexpressed"
+p1 <- ggplot(data=FRC_FDC.markers, aes(x=avg_log2FC, y=-log10(p_val_adj), col=diffexpressed)) + geom_point() + theme_classic()
+
+# Add lines as before...
+    #p2 <- p1 + geom_vline(xintercept=c(-2, 2), col="red") + geom_hline(yintercept=-log10(0.05), col="red")+ scale_color_manual(values=c("blue", "black", "red")) 
+p2 <- p11 + geom_vline(xintercept=c(-1.5, 1.5), col="red") + geom_hline(yintercept=-log10(0.05), col="red")+ scale_color_manual(values=c("blue", "black", "red")) 
+
+
+p1 + p2
+
+write.csv(FRC_FDC.markers,"C:/Users/HI/Documents/R data/s.markers/FRC_FDC.markers.csv") 
+
+
+FRC_FDC_markers$delabel <- NA
+FRC_FDC_markers$delabel[FRC_FDC_markers$diffexpressed != "NO"] <- FRC_FDC_markers$gene[FRC_FDC_markers$diffexpressed != "NO"]
+
+ggplot(data=FRC_FDC_markers, aes(x=avg_log2FC, y=-log10(p_val_adj), col=diffexpressed, label=delabel)) +
+  geom_point() + geom_text()
+theme_minimal() +
+  scale_color_manual(values=c("blue", "black", "red")) +
+  geom_vline(xintercept=c(-1.5,1.5), col="red") +
+  geom_hline(yintercept=-log10(0.05), col="red", FontSize = 1)
+
+# csv file에서 'gene' column추가 : 맨 왼쪽 gene 열을 맨 오른쪽에 복붙 > 
+FRC_FDC_markers$delabel[FRC_FDC_markers$diffexpressed != "NO"] <- FRC_FDC_markers$gene[FRC_FDC_markers$diffexpressed != "NO"]
+ggplot(data=FRC_FDC_markers, aes(x=avg_log2FC, y=-log10(p_val_adj), col=diffexpressed, label=delabel),FontSize(1)) +
+  geom_point() + 
+  theme_classic() +
+  geom_text() +
+  scale_color_manual(values=c("blue", "black", "red")) +
+  geom_vline(xintercept=c(-0.6, 0.6), col="red") +
+  geom_hline(yintercept=-log10(0.05), col="red")
+
+
+#averaged expression level in seurat
+data("frcfdc")
+head(AverageExpression(object = pbmc_small))
+
+table_expressionlevel_FRCFDC <- AverageExpression(FRCFDC,assays = NULL, features = NULL,return.seurat = FALSE,group.by = "ident",add.ident = NULL,slot = "data",verbose = TRUE,)
+write.csv(table_expressionlevel_FRCFDC,"C:/Users/HI/Documents/R data/s.markers/table_expressionlevel_FRCFDC.csv")
+
+EL_EMO <- AverageExpression(FRCFDC,  assays = NULL,return.seurat = FALSE,group.by = "ident",add.ident = NULL, slot = "data",verbose = TRUE,features = c("Agt", "Cav1", "Serpinh1", "Col18a1", "Col3a1", "Col4a1","Col4a2","Col4a4","Col4a5","Col5a1","Col5a2","Col8a1","Col1a1","Col1a2","Eln","Fn1","Foxf1","Hspg2","Lgals3","Lox","Loxl1","Mmp14","Nfkb2","Pdgfra","Lcp1","Ptx3","Sfrp2","Tgfb2","Adamts5","Creb3l1","Mmp23","Tmem38b","Col5a3","Dpt","Ntn4","Smpd3","Loxl4","Ccdc80","Ndnf","Col6a4","Pxdn","Vit","Tnxb","Loxl2","Qsox1","Col28a1","Adamts2","Lamc1","Adamtsl4","Adamts15","Col23a1","Vwa1","Egflam","Abi3bp","Mia3","Col27a1","Bmp1","Col6a1","Col6a2","P4ha2","Pcolce","Plod1","Bgn","Fbln2","Fbn1","Fbn2","Itgb5","F11r","Sparc","Sdc4","Emilin2","Atp1b1","Dpp4","Atp1a2","Ncam1","Hgf","Ptpn1","Stat3","Ubb","Ubc","Sh3kbp1","Tns3","Plat","Thbs2","Cdkn1b"))
+EL_motility <- AverageExpression(FRCFDC,  assays = NULL,return.seurat = FALSE,group.by = "ident",add.ident = NULL, slot = "data",verbose = TRUE,features = c("Acp5", "Actg1", "Angpt1", "Agt", "Acta2", "Anxa3","Aqp1","Rhob","Atp5a1","Cd151","Cav1","Coro1a","Cldn1","Ackr3","Col18a1","Col1a1","Ctsh","Egfr","Egr1","Ephb2","Fgf10","Fn1","Lpar1","Grn","Hspa5","Foxf1","Hgf","Hmgb1","Igf1r","Il6st","Jun","Lbp","Lgals3","Anxa1","Mmp14","Myoc","Ntn1","Ntrk3","Pcsk5","Pdgfra","Lgmn","Ptn","Ptprc","Cxcl12","Sema3c","Sema4b","Sema4c","Spi1","Sod2","Sparc","Stat3","Tac1","Tek","Tgfb2","Tgfbr2","Thy1","Ube2i","Tgfbr2","Tgfbr3","Thy1","Vegfa","Ube2i","Ets1","Cxcl14","Plpp3","Rarres2","Phpt1","Plvap","Mylk","Synpo2","Zc3h12a","P2ry6","Fam107a","Ccbe1","Mia3","Btg1","C3","Cd34","Col4a2","Cybb","Ecm1","Gata6","Klf2","Mecp2","Egfr","Ppp1r15a","Ngfr","Ntrk1","Ptgis","Sfrp2","Stat1","Thbs2","Creb3l1","Cysltr1","Rgcc","Ecscr","Bmper","Emilin2","Atp2b4","Meox2","Tgfbr3"))
+EL_BVD <- AverageExpression(FRCFDC,assays = NULL,return.seurat = FALSE,group.by = "ident",add.ident = NULL, slot = "data",verbose = TRUE,features = c("Ace", "Actg1", "Angpt1", "Agt", "Ahr", "Ang","Aqp1","Rhob","Zfp36l1","Klf5","Cav1","Cdh2","Socs3","Ackr3","Col18a1","Col3a1","Col4a1","Col4a2","Col5a1","Col8a1","Col1a1","Col1a2","Ecm1","Egr1","Egr2","Ephb2","Fgf10","Fn1","Gata6","Gja1","Gli3","Foxf1","Hpgd","Hspg2","Jun","Junb","Lox","Meox2","Mfge8","Cited2","Myh9","Ncl","Ngfr","Npr3","Nrp2","Pcsk5","Rora","Pdgfra","Prrx2","Cxcl12","Sfrp2","Sema3c","Spi1","Sox4","Syk","Tek","Tgfb2","Tgfbr2","Tgfbr3","Thy1","Vegfa","Wnt2","Osr1","Ramp1","Amotl2","Angptl4","Clec14a","Tmem100","Plpp3","Ecscr","Ndnf","Antxr1","Pxdn","Rspo3","Bmper","Heg1","Loxl2","Mylk","Zc3h12a","Ccbe1","Mia3","C3","Bcl10","Ctsh","Egfr","Esr1","Mmp14","Ntn1","Ptch1","Rps7","Sema4c","Sfrp1","Sdc4","Spry1","Zeb2","Hs3st3b1","Ctnnbip1","Csmd1","Mtss1","Dchs1","Rspo2"))
+EL_adhesion <- AverageExpression(FRCFDC,assays = NULL,return.seurat = FALSE,group.by = "ident",add.ident = NULL, slot = "data",verbose = TRUE,features =c("Ager", "Rhod", "B2m", "Bcl10", "C1qbp", "Cd1d1","Cd81","Cdk6","Emp2","Dmtn","Epha4","Ephb6","Fadd","Gpam","H2-Ab1","H2-DMb1","Foxf1","Hsph1","Hspd1","Hyal1","Icam1","Igf2","Il12a","Il2","Il7","Irf1","Jak2","Ldb1","Lif","Mdk","Cited2","Nrp1","Enpp2","Ccl21a","Ptger4","Ptn","Rara","Rela","Rras","Rsu1","Ccl2","Cxcl12","Sox12","Sox4","Sdc4","Thbs1","Tnfsf11","Tpm1","Vcam1","Vegfa","Vtn","Xbp1","Cib1","Ccl19","Tnfsf13b","Map4k4","Icosl","Myadm","Cxcl13","Lgals8","Socs5","Ndnf","Fcho1","Selenok","Nfkbiz","Kat5","Smarcd1","Emilin1","Ripk2","Acta2","Apoe","Bcl2","Bst1","Zfp36l1","Cd9","Cebpa","Ctsc","Fas","Fgf10","Ccn2","Flt3l","Gas6","Jund","Lag3","Laptm5","Lmo4","Lst1","Mif","Nfatc2","Pdgfa","Pla2g2d","Pla2g5","Ptpn2","Stxbp1","Tec","Tnfaip3","Tslp","Clcf1","Exosc3","Znhit1","Slamf8","Il33","Cygb","Dcaf15","Nr1d1","Zc3h12a","Cyp26b1","Tox","Akirin2","Fos","Gnas","Prmt1","Eif6","Jun","Meis2","Nfkbia","Nme2","Rbp1","Ccl9","Snai2","Stat3","Klf10","Zfp36","Tmem176b","Tmem176a","Tmem178","Meaf6","Hmgb2","Bmyc","Csf2ra","Csf2rb","Csf2rb2","Tenm3","Cnn2","Grem1","Ache","Cdh4","Cux1","Egr2","Gdi1","Id4","Mme","Myo5b","Ntf3","Ptprf","Rfx3","Sema5a","Trf","Vegfc","Cysltr1","Snw1","Plxnb2","Plxnb1","Robo2"))
+DEG_GO_motility <- as.data.frame(EL_motility$RNA) # extract expression level to table format
+write.csv(DEG_GO_EMO,"C:/Users/HI/Documents/R data/s.markers/DEG_GO_EMO.csv")
+
+# extract Module score : 같은 GO term에 있는 유전자들에 대해 FRC와 FDC에서의 발현 수준에 차이가 있는지 분석하기 위해 module score에서 유의한 차이가 나는지 확인한다.
+Module_EL_EMO <- list(c("Agt", "Cav1", "Serpinh1", "Col18a1", "Col3a1", "Col4a1","Col4a2","Col4a4","Col4a5","Col5a1","Col5a2","Col8a1","Col1a1","Col1a2","Eln","Fn1","Foxf1","Hspg2","Lgals3","Lox","Loxl1","Mmp14","Nfkb2","Pdgfra","Lcp1","Ptx3","Sfrp2","Tgfb2","Adamts5","Creb3l1","Mmp23","Tmem38b","Col5a3","Dpt","Ntn4","Smpd3","Loxl4","Ccdc80","Ndnf","Col6a4","Pxdn","Vit","Tnxb","Loxl2","Qsox1","Col28a1","Adamts2","Lamc1","Adamtsl4","Adamts15","Col23a1","Vwa1","Egflam","Abi3bp","Mia3","Col27a1","Bmp1","Col6a1","Col6a2","P4ha2","Pcolce","Plod1","Bgn","Fbln2","Fbn1","Fbn2","Itgb5","F11r","Sparc","Sdc4","Emilin2","Atp1b1","Dpp4","Atp1a2","Ncam1","Hgf","Ptpn1","Stat3","Ubb","Ubc","Sh3kbp1","Tns3","Plat","Thbs2","Cdkn1b"))
+FRCFDC_test <- AddModuleScore(object = FRCFDC_test,features = Module_EL_EMO,ctrl = 5,name = 'Module score')
+head(x = FRCFDC_test[])
+FeaturePlot(FRCFDC_test,features = "Module score1") +scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu")))
+
+Genelist_BVD <- list(c("Ace", "Actg1", "Angpt1", "Agt", "Ahr", "Ang","Aqp1","Rhob","Zfp36l1","Klf5","Cav1","Cdh2","Socs3","Ackr3","Col18a1","Col3a1","Col4a1","Col4a2","Col5a1","Col8a1","Col1a1","Col1a2","Ecm1","Egr1","Egr2","Ephb2","Fgf10","Fn1","Gata6","Gja1","Gli3","Foxf1","Hpgd","Hspg2","Jun","Junb","Lox","Meox2","Mfge8","Cited2","Myh9","Ncl","Ngfr","Npr3","Nrp2","Pcsk5","Rora","Pdgfra","Prrx2","Cxcl12","Sfrp2","Sema3c","Spi1","Sox4","Syk","Tek","Tgfb2","Tgfbr2","Tgfbr3","Thy1","Vegfa","Wnt2","Osr1","Ramp1","Amotl2","Angptl4","Clec14a","Tmem100","Plpp3","Ecscr","Ndnf","Antxr1","Pxdn","Rspo3","Bmper","Heg1","Loxl2","Mylk","Zc3h12a","Ccbe1","Mia3","C3","Bcl10","Ctsh","Egfr","Esr1","Mmp14","Ntn1","Ptch1","Rps7","Sema4c","Sfrp1","Sdc4","Spry1","Zeb2","Hs3st3b1","Ctnnbip1","Csmd1","Mtss1","Dchs1","Rspo2"))
+FRCDC_test <- AddModuleScore(object = FRCFDC_test,features = Genelist_BVD,ctrl = 5,name = "Module score_BVD")
+head(x = FRCFDC_test2[])
+FeaturePlot(FRCFDC_test2,features = "Module score_BVD") +scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu")))
+
+Genelist_motility <- list(c("Acp5", "Actg1", "Angpt1", "Agt", "Acta2", "Anxa3","Aqp1","Rhob","Atp5a1","Cd151","Cav1","Coro1a","Cldn1","Ackr3","Col18a1","Col1a1","Ctsh","Egfr","Egr1","Ephb2","Fgf10","Fn1","Lpar1","Grn","Hspa5","Foxf1","Hgf","Hmgb1","Igf1r","Il6st","Jun","Lbp","Lgals3","Anxa1","Mmp14","Myoc","Ntn1","Ntrk3","Pcsk5","Pdgfra","Lgmn","Ptn","Ptprc","Cxcl12","Sema3c","Sema4b","Sema4c","Spi1","Sod2","Sparc","Stat3","Tac1","Tek","Tgfb2","Tgfbr2","Thy1","Ube2i","Tgfbr2","Tgfbr3","Thy1","Vegfa","Ube2i","Ets1","Cxcl14","Plpp3","Rarres2","Phpt1","Plvap","Mylk","Synpo2","Zc3h12a","P2ry6","Fam107a","Ccbe1","Mia3","Btg1","C3","Cd34","Col4a2","Cybb","Ecm1","Gata6","Klf2","Mecp2","Egfr","Ppp1r15a","Ngfr","Ntrk1","Ptgis","Sfrp2","Stat1","Thbs2","Creb3l1","Cysltr1","Rgcc","Ecscr","Bmper","Emilin2","Atp2b4","Meox2","Tgfbr3"))
+FRCFDC_test2 <- AddModuleScore(object = FRCFDC_test2,features = Genelist_motility,ctrl = 5,name = "Module score_motility")
+head(x = FRCFDC_test2[])
+FeaturePlot(FRCFDC_test2,features = "Module score_motility1")+scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu")))
+
+Genelist_adhesion <- list(c("Ager", "Rhod", "B2m", "Bcl10", "C1qbp", "Cd1d1","Cd81","Cdk6","Emp2","Dmtn","Epha4","Ephb6","Fadd","Gpam","H2-Ab1","H2-DMb1","Foxf1","Hsph1","Hspd1","Hyal1","Icam1","Igf2","Il12a","Il2","Il7","Irf1","Jak2","Ldb1","Lif","Mdk","Cited2","Nrp1","Enpp2","Ccl21a","Ptger4","Ptn","Rara","Rela","Rras","Rsu1","Ccl2","Cxcl12","Sox12","Sox4","Sdc4","Thbs1","Tnfsf11","Tpm1","Vcam1","Vegfa","Vtn","Xbp1","Cib1","Ccl19","Tnfsf13b","Map4k4","Icosl","Myadm","Cxcl13","Lgals8","Socs5","Ndnf","Fcho1","Selenok","Nfkbiz","Kat5","Smarcd1","Emilin1","Ripk2","Acta2","Apoe","Bcl2","Bst1","Zfp36l1","Cd9","Cebpa","Ctsc","Fas","Fgf10","Ccn2","Flt3l","Gas6","Jund","Lag3","Laptm5","Lmo4","Lst1","Mif","Nfatc2","Pdgfa","Pla2g2d","Pla2g5","Ptpn2","Stxbp1","Tec","Tnfaip3","Tslp","Clcf1","Exosc3","Znhit1","Slamf8","Il33","Cygb","Dcaf15","Nr1d1","Zc3h12a","Cyp26b1","Tox","Akirin2","Fos","Gnas","Prmt1","Eif6","Jun","Meis2","Nfkbia","Nme2","Rbp1","Ccl9","Snai2","Stat3","Klf10","Zfp36","Tmem176b","Tmem176a","Tmem178","Meaf6","Hmgb2","Bmyc","Csf2ra","Csf2rb","Csf2rb2","Tenm3","Cnn2","Grem1","Ache","Cdh4","Cux1","Egr2","Gdi1","Id4","Mme","Myo5b","Ntf3","Ptprf","Rfx3","Sema5a","Trf","Vegfc","Cysltr1","Snw1","Plxnb2","Plxnb1","Robo2"))
+FRCFDC_test2 <-AddModuleScore(object = FRCFDC_test2,features = Genelist_adhesion,ctrl = 5,name = "Module score_adhesion")
+head(x = FRCFDC_test2[])
+FeaturePlot(FRCFDC_test2,features = "Module score_adhesion1")+scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu")))
