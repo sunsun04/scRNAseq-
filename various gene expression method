@@ -1,0 +1,19 @@
+# Addmodulescore 
+기능적으로 연관된 유전자 그룹에 대한 발현 수준 정도. 예를 들면, cell signaling에 관여하는 유전자들의 그룹에 대한 expression level을 점수로 매김 
+
+Module_EL_EMO <- list(c("Tns3","Plat","Thbs2","Cdkn1b"))
+FRCFDC_test <- AddModuleScore(object = FRCFDC_test,features = Module_EL_EMO,ctrl = 5,name = 'Module score')
+head(x = FRCFDC_test[])
+FeaturePlot(FRCFDC_test,features = "Module score1") +scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu")))
+
+# Fetchdata
+하나의 세포에서의 유전자 발현을 table 로 추출할 수 있는 방법. 이렇게 추출된 expression level value를 프리즘에서 violinplot으로 새로 그리면 p-value를 낼 수 있음. 
+< Fetching data for specific genes > 
+gene_of_interest <- c("GeneA", "GeneB")
+expression_data <- FetchData(seurat_object, vars = gene_of_interest)
+
+# Averageexpression
+한 유전자에 대한 세포들의 expression 평균값 추출. 즉, Averageexpression을 사용하면 특정 유전자에 대한 값 '하나'만 추출됨(평균냈기 때문)
+
+EL_EMO <- AverageExpression(FRCFDC,  assays = NULL,return.seurat = FALSE,group.by = "ident",add.ident = NULL, slot = "data",verbose = TRUE,features = c("Agt", "Col23a1","Thbs2","Cdkn1b"))
+EL-EMO는 excel file로 추출할 수 있음. 
