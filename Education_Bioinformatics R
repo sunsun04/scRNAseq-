@@ -1,0 +1,72 @@
+DESeq2 for Defferential gene expression 
+in RNA sequencing, 
+1. import RNA-seq count data 
+2. create Deseq dataset object 
+3. exploratory Data analysis(EDA)
+- Normalization with "voom" function 
+- Quality control and filtering 
+4. extimate size factor and dispersion 
+- size factor : to accoutn for sequencing depth
+- dispersion : variance of counts
+5. Defferential expression analysis
+6. visualization 
+- Volcano plot : visualized tge log2 fold change vs statistical significance(p-value) of each gene using a volcano plot 
+- Heatmap : cluster genes and samples using heatmap(pheatmap())
+
+sample count data는 csv file로 되어있음. 
+
+# data load 
+setwd("파일경로")
+# load libraries 
+DESeq2
+tidyverse
+airway
+
+# 1. preparijng count data
+# read in counts data
+count_data <- read.csv('counts.data.csv') # counts.data.csv는 위에서 로드한 파일명 
+head(counts_data)
+
+# read in sample into 
+colData <- read.csv('counts.data.csv')
+
+#making sure the row names in colData matches to column namces in counts_data
+all(colnames(counts_data) %in% rownames(coldata))
+
+# are they in the same order?
+all(colnames(counts_data) --rownames(colData))
+
+#2. construct a DESeqDataSet object 
+dds <- DESeqdataSetFromMatrix(countData = counts_data,colData = colData , design = ~ dexamethasone)
+dds
+
+# pre-filtering : removing rows with low gene count
+# keeping row that have at least 10 reads total 
+keep <- rowSums(counts(dds)) >= 10
+dds <- dds[keep,]
+
+dds 
+
+#set the factor level 
+dds$dexamethasone >- relevel(dds$dexamethasone,ref = "untreated")
+
+# 3. Run DESeq  
+dds <- DESeq(dds)
+res <- results(dds)
+
+res
+
+# Explore results
+summary(res)
+
+res0.01 <-results(dds,alpha = 0.01)
+summary(res0.01)
+
+# contrasts
+resultsNames(dds)
+
+e.g. : treated_4hrs,trated_8hrs,untreated
+results(dds,contrast = c("dexanethasone","treated_4hrs","untreated"))
+ plotMA(res) 
+
+
