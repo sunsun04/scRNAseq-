@@ -1,0 +1,26 @@
+< pre-setup > 
+
+1. mouse transcriptome  ref 다운 받고 압출 풀기 
+2. cellranger 설치(이미 되어있음)
+3. wget : data 다운로드 / tar : 압출 풀기
+
+< File load and File format  conversion >
+
+1. Linux 전용 운영체제(윈도우 아님)를 사용해야하기 때문에 컴을 껐다 킨다.
+2. terminal을 켠다.
+3. 'sudo apt-get update' 입력
+4. 컴 로그인 할때 사용한 계정 비번 입력 : qawsedrf12!(코드 에러날때 사용하면 해결되기도함.)
+5. cd /opt/cellranger-6.0.0/
+6. cd /opt/cellranger-6.0.0 $ 
+7. [export path 설정] export PATH=/opt/cellranger-6.0.0:PATH
+8. [ cellranger 실행 ] cellranger
+9. 
+
+```
+cellranger count --id=[ 생성되는 결과의 폴더명 ]   --fastqs=[fastq file 경로]   --sample=[metadata에 들어가는 sample info; fastq file명에서 예를들어 []_S1_L001 이면, []에 들어가는 파일명 ]  --transcriptome=[reference 파일 경로] 
+   --nosecondary
+```
+
+- mouse ref 경로 : home/kyeongseok/refdata-gex-mm10-2020-A
+
+총 파일 생성하는데에 10분정도..시간이 꽤 걸림
